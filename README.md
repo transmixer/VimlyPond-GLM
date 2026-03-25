@@ -1,60 +1,60 @@
-# 🚀 Welcome to Z.ai Code Scaffold
+# Vimlypond
 
-A modern, production-ready web application scaffold powered by cutting-edge technologies, designed to accelerate your development with [Z.ai](https://chat.z.ai)'s AI-powered coding assistance.
+A Vim-style modal music notation editor with VexFlow rendering and LilyPond export.
 
-## ✨ Technology Stack
+## Features
 
-This scaffold provides a robust foundation built with:
+### Modal Editing
+- **Normal Mode** - Navigate and manipulate music notation
+- **Insert Mode** - Input notes and rests with intelligent pitch inference
 
-### 🎯 Core Framework
-- **⚡ Next.js 16** - The React framework for production with App Router
-- **📘 TypeScript 5** - Type-safe JavaScript for better developer experience
-- **🎨 Tailwind CSS 4** - Utility-first CSS framework for rapid UI development
+### Note Input & Editing
+| Key | Action |
+|-----|--------|
+| `a-g` | Insert note (A-G) |
+| `r` | Insert rest |
+| `1,2,4,8,16` | Set duration (whole, half, quarter, eighth, sixteenth) |
+| `.` | Add dot (augmentation dot) |
+| `+/-` | Add sharp/flat |
+| `'/,` | Raise/lower octave |
+| `Shift+a-g` | Add pitch to current note (chord input) |
 
-### 🧩 UI Components & Styling
-- **🧩 shadcn/ui** - High-quality, accessible components built on Radix UI
-- **🎯 Lucide React** - Beautiful & consistent icon library
-- **🌈 Framer Motion** - Production-ready motion library for React
-- **🎨 Next Themes** - Perfect dark mode in 2 lines of code
+### Navigation
+| Key | Action |
+|-----|--------|
+| `h/l` | Move left/right within measure |
+| `j/k` | Move between staves |
+| `n/b` | Move to next/previous measure |
 
-### 📋 Forms & Validation
-- **🎣 React Hook Form** - Performant forms with easy validation
-- **✅ Zod** - TypeScript-first schema validation
+### Score Operations
+| Key | Action |
+|-----|--------|
+| `o/O` | Add staff below/above |
+| `t` | Toggle clef (treble/bass) |
+| `Shift+K` | Key signature selector |
+| `Shift+M` | Time signature selector |
+| `x` | Delete element |
+| `u` | Undo |
+| `Ctrl+R` | Redo |
+| `.` | Repeat last action |
 
-### 🔄 State Management & Data Fetching
-- **🐻 Zustand** - Simple, scalable state management
-- **🔄 TanStack Query** - Powerful data synchronization for React
-- **🌐 Fetch** - Promise-based HTTP request
+### Advanced Features
+- **Chord Input** - Add multiple pitches to a single note position
+- **Key Signatures** - Support for all major and minor keys (15+15)
+- **Time Signatures** - Common meters (2/4, 3/4, 4/4, 6/8, etc.)
+- **Cross-measure Ties** - Automatic tie rendering across barlines
+- **Stream Balancing** - Intelligent measure overflow/underflow handling
+- **Multi-staff Support** - Piano scores, orchestral layouts
+- **LilyPond Export** - Generate `.ly` files for professional engraving
 
-### 🗄️ Database & Backend
-- **🗄️ Prisma** - Next-generation TypeScript ORM
-- **🔐 NextAuth.js** - Complete open-source authentication solution
+### UI/UX
+- Real-time VexFlow rendering
+- Input preview in status bar
+- Context-aware help panel (`?` key)
+- Bilingual interface (中文/English)
+- LocalStorage persistence
 
-### 🎨 Advanced UI Features
-- **📊 TanStack Table** - Headless UI for building tables and datagrids
-- **🖱️ DND Kit** - Modern drag and drop toolkit for React
-- **📊 Recharts** - Redefined chart library built with React and D3
-- **🖼️ Sharp** - High performance image processing
-
-### 🌍 Internationalization & Utilities
-- **🌍 Next Intl** - Internationalization library for Next.js
-- **📅 Date-fns** - Modern JavaScript date utility library
-- **🪝 ReactUse** - Collection of essential React hooks for modern development
-
-## 🎯 Why This Scaffold?
-
-- **🏎️ Fast Development** - Pre-configured tooling and best practices
-- **🎨 Beautiful UI** - Complete shadcn/ui component library with advanced interactions
-- **🔒 Type Safety** - Full TypeScript configuration with Zod validation
-- **📱 Responsive** - Mobile-first design principles with smooth animations
-- **🗄️ Database Ready** - Prisma ORM configured for rapid backend development
-- **🔐 Auth Included** - NextAuth.js for secure authentication flows
-- **📊 Data Visualization** - Charts, tables, and drag-and-drop functionality
-- **🌍 i18n Ready** - Multi-language support with Next Intl
-- **🚀 Production Ready** - Optimized build and deployment settings
-- **🤖 AI-Friendly** - Structured codebase perfect for AI assistance
-
-## 🚀 Quick Start
+## Quick Start
 
 ```bash
 # Install dependencies
@@ -63,79 +63,45 @@ bun install
 # Start development server
 bun run dev
 
-# Build for production
-bun run build
-
-# Start production server
-bun start
+# Run tests
+bun run test
 ```
 
-Open [http://localhost:3000](http://localhost:3000) to see your application running.
-
-## 🤖 Powered by Z.ai
-
-This scaffold is optimized for use with [Z.ai](https://chat.z.ai) - your AI assistant for:
-
-- **💻 Code Generation** - Generate components, pages, and features instantly
-- **🎨 UI Development** - Create beautiful interfaces with AI assistance  
-- **🔧 Bug Fixing** - Identify and resolve issues with intelligent suggestions
-- **📝 Documentation** - Auto-generate comprehensive documentation
-- **🚀 Optimization** - Performance improvements and best practices
-
-Ready to build something amazing? Start chatting with Z.ai at [chat.z.ai](https://chat.z.ai) and experience the future of AI-powered development!
-
-## 📁 Project Structure
+## Project Structure
 
 ```
-src/
-├── app/                 # Next.js App Router pages
-├── components/          # Reusable React components
-│   └── ui/             # shadcn/ui components
-├── hooks/              # Custom React hooks
-└── lib/                # Utility functions and configurations
+src/lib/vimlypond/
+├── store.ts          # Zustand state management
+├── music.ts          # Music theory & LilyPond export
+├── renderer.ts       # VexFlow rendering engine
+├── types.ts          # TypeScript definitions
+├── i18n.ts           # Internationalization
+└── *.test.ts         # Test files
+
+src/components/vimlypond/
+└── VimlypondEditor.tsx  # Main editor component
 ```
 
-## 🎨 Available Features & Components
+## Technology Stack
 
-This scaffold includes a comprehensive set of modern web development tools:
+- **Next.js 16** - React framework with App Router
+- **TypeScript** - Type-safe development
+- **VexFlow** - Music notation rendering
+- **Zustand** - State management
+- **Tailwind CSS** - Styling
+- **shadcn/ui** - UI components
 
-### 🧩 UI Components (shadcn/ui)
-- **Layout**: Card, Separator, Aspect Ratio, Resizable Panels
-- **Forms**: Input, Textarea, Select, Checkbox, Radio Group, Switch
-- **Feedback**: Alert, Toast (Sonner), Progress, Skeleton
-- **Navigation**: Breadcrumb, Menubar, Navigation Menu, Pagination
-- **Overlay**: Dialog, Sheet, Popover, Tooltip, Hover Card
-- **Data Display**: Badge, Avatar, Calendar
+## Development
 
-### 📊 Advanced Data Features
-- **Tables**: Powerful data tables with sorting, filtering, pagination (TanStack Table)
-- **Charts**: Beautiful visualizations with Recharts
-- **Forms**: Type-safe forms with React Hook Form + Zod validation
+See [DEVELOPMENT.md](./DEVELOPMENT.md) for:
+- Version numbering conventions
+- Commit message guidelines
+- Release process
 
-### 🎨 Interactive Features
-- **Animations**: Smooth micro-interactions with Framer Motion
-- **Drag & Drop**: Modern drag-and-drop functionality with DND Kit
-- **Theme Switching**: Built-in dark/light mode support
+## Changelog
 
-### 🔐 Backend Integration
-- **Authentication**: Ready-to-use auth flows with NextAuth.js
-- **Database**: Type-safe database operations with Prisma
-- **API Client**: HTTP requests with Fetch + TanStack Query
-- **State Management**: Simple and scalable with Zustand
+See [CHANGELOG.md](./CHANGELOG.md) for version history.
 
-### 🌍 Production Features
-- **Internationalization**: Multi-language support with Next Intl
-- **Image Optimization**: Automatic image processing with Sharp
-- **Type Safety**: End-to-end TypeScript with Zod validation
-- **Essential Hooks**: 100+ useful React hooks with ReactUse for common patterns
+## License
 
-## 🤝 Get Started with Z.ai
-
-1. **Clone this scaffold** to jumpstart your project
-2. **Visit [chat.z.ai](https://chat.z.ai)** to access your AI coding assistant
-3. **Start building** with intelligent code generation and assistance
-4. **Deploy with confidence** using the production-ready setup
-
----
-
-Built with ❤️ for the developer community. Supercharged by [Z.ai](https://chat.z.ai) 🚀
+MIT

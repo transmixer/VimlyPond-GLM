@@ -47,5 +47,16 @@ test
 prompt
 
 server.log
-# Skills directory
+# Vimlypond - excluded scaffold files
+/upload/
+/download/
+/docs/
+/examples/
+/.zscripts/
+/mini-services/
+/prisma/
+/db/
 /skills/
+src/hooks/
+src/lib/db.ts
+Caddyfile

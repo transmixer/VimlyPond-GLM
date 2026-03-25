@@ -2,6 +2,39 @@
 
 All notable changes to Vimlypond will be documented in this file.
 
+## [v0.10.0] - 2025-03-25
+
+### Changed
+- **项目结构清理** - 移除开发脚手架无关文件
+  - 删除 `skills/` 目录（AI能力模块，Vimlypond未使用）
+  - 删除 `examples/` 目录（示例代码）
+  - 删除 `.zscripts/` 目录（容器脚本）
+  - 删除 `mini-services/` 目录（WebSocket服务）
+  - 删除 `prisma/` 和 `db/` 目录（数据库，Vimlypond未使用）
+  - 删除 `upload/`、`download/`、`docs/` 目录
+  - 删除未使用的 UI 组件（仅保留 `button.tsx`）
+  - 删除 `src/hooks/` 目录
+  - 删除 `src/lib/db.ts`
+  - 更新 `.gitignore` 排除脚手架文件
+
+### Project Structure (Cleaned)
+```
+src/
+├── app/                    # Next.js 页面入口
+├── components/
+│   ├── ui/button.tsx       # 唯一使用的UI组件
+│   └── vimlypond/          # 编辑器组件
+└── lib/
+    ├── utils.ts            # 工具函数
+    └── vimlypond/          # 核心逻辑
+        ├── store.ts        # 状态管理
+        ├── music.ts        # 音乐理论
+        ├── renderer.ts     # VexFlow渲染
+        ├── types.ts        # 类型定义
+        ├── i18n.ts         # 国际化
+        └── *.test.ts       # 测试文件
+```
+
 ## [v0.8.0] - 2025-01-17
 
 ### Added

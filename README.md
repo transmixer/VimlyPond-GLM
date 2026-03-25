@@ -93,10 +93,10 @@ src/components/vimlypond/
 
 ## Development
 
-See [DEVELOPMENT.md](./DEVELOPMENT.md) for:
+See [开发规范.md](./开发规范.md) for:
+- PR development workflow
 - Version numbering conventions
 - Commit message guidelines
-- Release process
 
 ## Changelog
 

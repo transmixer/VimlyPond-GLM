@@ -198,10 +198,10 @@ describe('普通模式修改时值', () => {
             measures: [
               {
                 elements: [
-                  { type: 'note', midiPitch: 60, duration: 4, dots: 0, alter: 0, tieStart: false, tieEnd: false },
-                  { type: 'note', midiPitch: 62, duration: 4, dots: 0, alter: 0, tieStart: false, tieEnd: false },
-                  { type: 'note', midiPitch: 64, duration: 4, dots: 0, alter: 0, tieStart: false, tieEnd: false },
-                  { type: 'note', midiPitch: 65, duration: 4, dots: 0, alter: 0, tieStart: false, tieEnd: false },
+                  { type: 'note', pitches: [{ midiPitch: 60, alter: 0 }], duration: 4, dots: 0, tieStart: false, tieEnd: false },
+                  { type: 'note', pitches: [{ midiPitch: 62, alter: 0 }], duration: 4, dots: 0, tieStart: false, tieEnd: false },
+                  { type: 'note', pitches: [{ midiPitch: 64, alter: 0 }], duration: 4, dots: 0, tieStart: false, tieEnd: false },
+                  { type: 'note', pitches: [{ midiPitch: 65, alter: 0 }], duration: 4, dots: 0, tieStart: false, tieEnd: false },
                 ],
                 durationUsed: 4
               },
@@ -242,14 +242,14 @@ describe('普通模式修改时值', () => {
             measures: [
               {
                 elements: [
-                  { type: 'note', midiPitch: 60, duration: 2, dots: 0, alter: 0, tieStart: false, tieEnd: false },
-                  { type: 'note', midiPitch: 62, duration: 2, dots: 0, alter: 0, tieStart: false, tieEnd: false },
+                  { type: 'note', pitches: [{ midiPitch: 60, alter: 0 }], duration: 2, dots: 0, tieStart: false, tieEnd: false },
+                  { type: 'note', pitches: [{ midiPitch: 62, alter: 0 }], duration: 2, dots: 0, tieStart: false, tieEnd: false },
                 ],
                 durationUsed: 4
               },
               {
                 elements: [
-                  { type: 'note', midiPitch: 64, duration: 2, dots: 0, alter: 0, tieStart: false, tieEnd: false },
+                  { type: 'note', pitches: [{ midiPitch: 64, alter: 0 }], duration: 2, dots: 0, tieStart: false, tieEnd: false },
                 ],
                 durationUsed: 2
               }

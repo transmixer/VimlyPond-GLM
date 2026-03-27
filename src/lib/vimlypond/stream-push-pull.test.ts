@@ -21,10 +21,10 @@ describe('==========================================', () => {
     // 创建一个 4/4 拍的满小节
     const createFullMeasure = () => ({
       elements: [
-        { type: 'note' as const, midiPitch: 60, duration: 4, dots: 0, alter: 0 as const },  // C4 四分音符
-        { type: 'note' as const, midiPitch: 62, duration: 4, dots: 0, alter: 0 as const },  // D4 四分音符
-        { type: 'note' as const, midiPitch: 64, duration: 4, dots: 0, alter: 0 as const },  // E4 四分音符
-        { type: 'note' as const, midiPitch: 65, duration: 4, dots: 0, alter: 0 as const },  // F4 四分音符
+        { type: 'note' as const, pitches: [{ midiPitch: 60, alter: 0 as const }], duration: 4, dots: 0, tieStart: false, tieEnd: false },  // C4 四分音符
+        { type: 'note' as const, pitches: [{ midiPitch: 62, alter: 0 as const }], duration: 4, dots: 0, tieStart: false, tieEnd: false },  // D4 四分音符
+        { type: 'note' as const, pitches: [{ midiPitch: 64, alter: 0 as const }], duration: 4, dots: 0, tieStart: false, tieEnd: false },  // E4 四分音符
+        { type: 'note' as const, pitches: [{ midiPitch: 65, alter: 0 as const }], duration: 4, dots: 0, tieStart: false, tieEnd: false },  // F4 四分音符
       ],
       durationUsed: BEATS_PER_MEASURE  // 4拍
     });
@@ -32,9 +32,9 @@ describe('==========================================', () => {
     // 创建一个有 3 个四分音符的小节（剩余 1 拍空间）
     const createPartialMeasure = () => ({
       elements: [
-        { type: 'note' as const, midiPitch: 60, duration: 4, dots: 0, alter: 0 as const },
-        { type: 'note' as const, midiPitch: 62, duration: 4, dots: 0, alter: 0 as const },
-        { type: 'note' as const, midiPitch: 64, duration: 4, dots: 0, alter: 0 as const },
+        { type: 'note' as const, pitches: [{ midiPitch: 60, alter: 0 as const }], duration: 4, dots: 0, tieStart: false, tieEnd: false },
+        { type: 'note' as const, pitches: [{ midiPitch: 62, alter: 0 as const }], duration: 4, dots: 0, tieStart: false, tieEnd: false },
+        { type: 'note' as const, pitches: [{ midiPitch: 64, alter: 0 as const }], duration: 4, dots: 0, tieStart: false, tieEnd: false },
       ],
       durationUsed: 3
     });
@@ -106,7 +106,7 @@ describe('==========================================', () => {
         expect(measure2.elements.length).toBe(1);
         expect(measure2.durationUsed).toBe(1);
         // G 的 MIDI pitch 是 67，67 % 12 = 7
-        expect((measure2.elements[0] as { midiPitch: number }).midiPitch % 12).toBe(7); // G
+        expect((measure2.elements[0] as { pitches: { midiPitch: number }[] }).pitches[0].midiPitch % 12).toBe(7); // G
       });
 
       it('满小节后输入二分音符：新音符的一部分被推到下一小节', () => {
@@ -315,7 +315,7 @@ describe('==========================================', () => {
               measures: [
                 {
                   elements: [
-                    { type: 'note' as const, midiPitch: 60, duration: 4, dots: 0, alter: 0 as const },
+                    { type: 'note' as const, pitches: [{ midiPitch: 60, alter: 0 as const }], duration: 4, dots: 0, tieStart: false, tieEnd: false },
                   ],
                   durationUsed: 1
                 }

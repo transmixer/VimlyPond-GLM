@@ -134,9 +134,9 @@ describe('光标定位测试', () => {
       // noteRects[2] 对应第三个音符
       
       const elements = [
-        { type: 'note', midiPitch: 60 },
-        { type: 'note', midiPitch: 62 },
-        { type: 'note', midiPitch: 64 }
+        { type: 'note', pitches: [{ midiPitch: 60, alter: 0 }] },
+        { type: 'note', pitches: [{ midiPitch: 62, alter: 0 }] },
+        { type: 'note', pitches: [{ midiPitch: 64, alter: 0 }] }
       ];
       
       // 模拟 noteRects

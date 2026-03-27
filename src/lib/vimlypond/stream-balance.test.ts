@@ -16,10 +16,9 @@ import type { Note, Staff, Measure } from './types';
 function note(duration: number, midiPitch: number = 60): Note {
   return {
     type: 'note',
-    midiPitch,
+    pitches: [{ midiPitch, alter: 0 }],
     duration,
     dots: 0,
-    alter: 0,
     tieStart: false,
     tieEnd: false,
   };
@@ -43,7 +42,7 @@ describe('splitNoteWithDuration', () => {
     expect(second.duration).toBe(4);
     expect(first.tieStart).toBe(true);
     expect(second.tieEnd).toBe(true);
-    expect(first.midiPitch).toBe(second.midiPitch);
+    expect(first.pitches[0].midiPitch).toBe(second.pitches[0].midiPitch);
   });
 
   it('分割附点四分音符为四分+八分（带延音线）', () => {
@@ -202,14 +201,14 @@ describe('balanceMeasures', () => {
     const lastInM1 = result.measures[0].elements[2] as Note;
     expect(lastInM1.duration).toBe(4);
     expect(lastInM1.tieStart).toBe(true);
-    expect(lastInM1.midiPitch).toBe(64);
+    expect(lastInM1.pitches[0].midiPitch).toBe(64);
 
     // 小节2应该有1拍，是分割出来的四分音符，带 tieEnd（延音线的结束）
     expect(result.measures[1].durationUsed).toBe(1);
     const firstInM2 = result.measures[1].elements[0] as Note;
     expect(firstInM2.duration).toBe(4);
     expect(firstInM2.tieEnd).toBe(true);
-    expect(firstInM2.midiPitch).toBe(64);
+    expect(firstInM2.pitches[0].midiPitch).toBe(64);
   });
 
   // 场景4：合并延音线音符

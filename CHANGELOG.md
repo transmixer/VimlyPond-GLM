@@ -2,6 +2,24 @@
 
 All notable changes to Vimlypond will be documented in this file.
 
+## [v0.11.0] - 2026-07-14
+
+### Changed
+- **完善 .gitignore 规则** - 明确区分项目代码与开发环境
+  - 添加锁文件忽略规则（bun.lock, package-lock.json, yarn.lock, pnpm-lock.yaml）
+  - 添加日志文件、临时文件、编辑器配置等忽略规则
+  - 按类别组织规则（依赖、构建、日志、系统文件、编辑器等），提高可读性
+
+- **从 Git 跟踪中移除 bun.lock**
+  - 锁文件可通过 `bun install` 重新生成
+  - 减小仓库体积，避免锁文件冲突
+
+### Added
+- **新增开发环境搭建文档** (`DEVELOPMENT_SETUP.md`)
+  - 详细说明如何重新搭建开发环境
+  - 提供多种包管理器选择（Bun/npm/pnpm/Yarn）
+  - 包含常见任务、故障排除指南
+
 ## [v0.10.0] - 2025-03-25
 
 ### Changed

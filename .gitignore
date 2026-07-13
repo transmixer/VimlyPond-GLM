@@ -1,53 +1,135 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
-# dependencies
-node_modules
+# ============= 依赖与锁文件 =============
+# 依赖目录
+node_modules/
 /.pnp
 .pnp.*
+
+# 锁文件 - 可通过包管理器重新生成
+bun.lock
+bun.lockb
+pnpm-lock.yaml
+yarn.lock
+package-lock.json
+
+# Yarn 特定
 .yarn/*
 !.yarn/patches
 !.yarn/plugins
 !.yarn/releases
 !.yarn/versions
 
-# testing
-/coverage
 
-# next.js
+# ============= 构建与产物 =============
+# Next.js 构建产物
 /.next/
 /out/
 
-# production
+# 生产构建
 /build
+/dist
 
-# misc
-.DS_Store
-*.pem
+# 测试覆盖率
+/coverage
 
-# debug
+
+# ============= 开发环境日志与临时文件 =============
+# 日志文件
+*.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
+dev.log
+server.log
+access.log
+error.log
 
-# env files (can opt-in for committing if needed)
-.env*
+# 开发环境生成的临时文件
+.accesslog
+.config
+.stats
+.local
+.temp
+.tmp
 
-# vercel
-.vercel
-
-# typescript
-*.tsbuildinfo
-next-env.d.ts
+# 本地开发配置
 local-*
+.env*.local
+.env*.development
+
+
+# ============= 系统文件 =============
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+desktop.ini
+
+# Linux
+*~
+
+
+# ============= 编辑器与 IDE =============
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.cursor/
+
+# Claude/Z AI 配置
 .claude
 .z-ai-config
-dev.log
-test
-prompt
 
-server.log
-# Vimlypond - excluded scaffold files
+
+# ============= 环境变量与密钥 =============
+# 环境变量文件 - 可通过 .env.example 重新创建
+.env*
+!.env.example
+!.env.sample
+
+# 密钥与证书
+*.pem
+*.key
+*.cert
+*.p12
+*.pfx
+
+
+# ============= 部署与平台 =============
+# Vercel
+.vercel
+
+# Netlify
+.netlify
+
+# Docker
+.dockerignore
+
+
+# ============= TypeScript =============
+*.tsbuildinfo
+next-env.d.ts
+
+
+# ============= 测试与调试 =============
+# 测试产生的临时文件
+test/
+tmp/
+temp/
+
+# 调试文件
+debug/
+*.debug
+
+
+# ============= Vimlypond 项目特定 =============
+# 已排除的脚手架文件
 /upload/
 /download/
 /docs/
@@ -57,6 +139,10 @@ server.log
 /prisma/
 /db/
 /skills/
+
+# 已排除的源代码
 src/hooks/
 src/lib/db.ts
+
+# Caddy 服务器配置
 Caddyfile

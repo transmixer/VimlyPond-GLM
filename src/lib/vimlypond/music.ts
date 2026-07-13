@@ -676,35 +676,53 @@ export function balanceMeasures(
     return staff;
   }
 
-  // 从起始小节开始处理
-  for (let m = startFromMeasure; m < newMeasures.length; m++) {
-    // 先尝试向前合并（如果当前小节开头是 tieEnd）
-    newMeasures = tryMergeFromPrevious(newMeasures, m);
+  let changed: boolean;
+  do {
+    changed = false;
+    
+    // 从起始小节开始处理
+    for (let m = startFromMeasure; m < newMeasures.length; m++) {
+      // 先尝试向前合并（如果当前小节开头是 tieEnd）
+      const mergedMeasures = tryMergeFromPrevious(newMeasures, m);
+      if (mergedMeasures !== newMeasures) {
+        newMeasures = mergedMeasures;
+        changed = true;
+      }
 
-    // 计算当前时值
-    const measure = newMeasures[m];
-    let currentDuration = calculateMeasureDuration(measure);
+      // 计算当前时值
+      const measure = newMeasures[m];
+      let currentDuration = calculateMeasureDuration(measure);
 
-    // 溢出处理
-    while (currentDuration > BEATS_PER_MEASURE && measure.elements.length > 0) {
-      const result = pushElementToNext(newMeasures, m);
-      if (!result) break;
-      newMeasures = result;
-      currentDuration = calculateMeasureDuration(newMeasures[m]);
-    }
+      // 溢出处理
+      while (currentDuration > BEATS_PER_MEASURE && measure.elements.length > 0) {
+        const result = pushElementToNext(newMeasures, m);
+        if (!result) break;
+        newMeasures = result;
+        currentDuration = calculateMeasureDuration(newMeasures[m]);
+        changed = true;
+      }
 
-    // 不满处理
-    const remaining = BEATS_PER_MEASURE - currentDuration;
-    if (remaining > 0) {
-      if (m + 1 < newMeasures.length && newMeasures[m + 1].elements.length > 0) {
-        // 有下一小节，尝试拉入
-        newMeasures = pullFromNext(newMeasures, m);
-      } else if (options.fillRestOnFinal && m === newMeasures.length - 1) {
-        // 最后一个小节，填充休止符
-        newMeasures = fillWithRests(newMeasures, m, remaining);
+      // 不满处理
+      const remaining = BEATS_PER_MEASURE - currentDuration;
+      if (remaining > 0) {
+        if (m + 1 < newMeasures.length && newMeasures[m + 1].elements.length > 0) {
+          // 有下一小节，尝试拉入
+          const pulledMeasures = pullFromNext(newMeasures, m);
+          if (pulledMeasures !== newMeasures) {
+            newMeasures = pulledMeasures;
+            changed = true;
+          }
+        } else if (options.fillRestOnFinal && m === newMeasures.length - 1) {
+          // 最后一个小节，填充休止符
+          const filledMeasures = fillWithRests(newMeasures, m, remaining);
+          if (filledMeasures !== newMeasures) {
+            newMeasures = filledMeasures;
+            changed = true;
+          }
+        }
       }
     }
-  }
+  } while (changed);
 
   return { ...staff, measures: newMeasures };
 }

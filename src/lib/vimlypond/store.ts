@@ -1,4 +1,30 @@
 // Vimlypond 状态管理
+
+// Score version migration
+// 1: Initial version with version field, extended MeasureElement
+// If no version field exists, it is version 0
+function migrateScore(oldScore: any): Score {
+  // Version 0 -> 1: add version field, initialize new fields
+  if (!oldScore.version) {
+    oldScore.version = 1;
+  }
+  // Add missing fields to measures
+  if (oldScore.staves) {
+    oldScore.staves.forEach((staff: any) => {
+      if (staff.measures) {
+        staff.measures.forEach((measure: any) => {
+          if (!measure.barlineLeft) measure.barlineLeft = "single";
+          if (!measure.barlineRight) measure.barlineRight = "single";
+        });
+      }
+    });
+  }
+  // Add meta fields if missing
+  if (!oldScore.title) oldScore.title = undefined;
+  if (!oldScore.composer) oldScore.composer = undefined;
+  return oldScore as Score;
+}
+
 import { create } from 'zustand';
 import type { Score, CursorPosition, History, InputState, NoteRect, Language, Note, Measure, RepeatableAction, KeySignatureName, MeterName } from './types';
 import {
@@ -43,6 +69,8 @@ interface VimlypondState {
   setCursorPos: (pos: Partial<CursorPosition>) => void;
   setInputState: (state: Partial<InputState>) => void;
   setNoteRects: (rects: NoteRect[]) => void;
+  // Command execution (new pattern)
+  executeCommand: (command: Command) => void;
   setLang: (lang: Language) => void;
   setHelpOpen: (open: boolean) => void;
   setLastAction: (action: RepeatableAction | null) => void;
@@ -165,24 +193,6 @@ export const useVimlypondStore = create<VimlypondState>((set, get) => ({
     });
     return true;
   },
-  
-  redo: () => {
-    const { score, history } = get();
-    if (history.future.length === 0) return false;
-    
-    const newPast = [...history.past, JSON.stringify(score)];
-    const newFuture = [...history.future];
-    const nextScore = JSON.parse(newFuture.pop()!);
-    
-    set({
-      score: nextScore,
-      history: { past: newPast, future: newFuture }
-    });
-    return true;
-  },
-  
-  // 存储
-  saveToStorage: () => {
     try {
       const { score, cursorPos } = get();
       localStorage.setItem(STORAGE_KEY, JSON.stringify({ score, cursorPos }));
@@ -974,5 +984,44 @@ export const useVimlypondStore = create<VimlypondState>((set, get) => ({
     a.click();
     URL.revokeObjectURL(a.href);
     get().showToast(lang === 'zh' ? '已导出至 score.ly' : 'Exported to score.ly', 'success');
+  }
+}));
+  loadFromStorage: () => {
+    try {
+      const data = localStorage.getItem(STORAGE_KEY);
+      if (data) {
+        const parsed = JSON.parse(data);
+        if (parsed.score && parsed.score.staves && parsed.score.staves.length > 0) {
+          // Migrate old version data to new schema
+          const migratedScore = migrateScore(parsed.score);
+          set({
+            score: migratedScore,
+            cursorPos: parsed.cursorPos || get().cursorPos
+          });
+          return true;
+        }
+      }
+    } catch (e) {
+      // 忽略加载错误
+    }
+    return false;
+
+  // Execute a command (new command pattern)
+  executeCommand: (command) => {
+    const { score, cursorPos } = get();
+    // Clone current state before modification
+    get().saveState();
+    
+    // Execute the command
+    const result = command.execute({ score, cursorPos });
+    
+    // Update state with result
+    set({
+      score: result.score,
+      cursorPos: result.cursorPos
+    });
+    
+    // Save to storage
+    get().saveToStorage();
   }
 }));

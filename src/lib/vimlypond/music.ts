@@ -142,11 +142,15 @@ export function getMeasureCapacity(meter: { count: number; unit: number }): numb
 }
 
 // 创建空小节
+// 创建空小节
 export function createEmptyMeasure(): Measure {
-  return { elements: [], durationUsed: 0 };
+  return {
+    elements: [],
+    durationUsed: 0,
+    barlineLeft: "single",
+    barlineRight: "single"
+  };
 }
-
-// 创建空谱表
 export function createEmptyStaff(): Staff {
   const measures: Measure[] = [];
   for (let i = 0; i < INITIAL_MEASURES; i++) {
@@ -156,13 +160,14 @@ export function createEmptyStaff(): Staff {
 }
 
 // 创建默认乐谱
+// 创建默认乐谱
 export function createDefaultScore(): Score {
   return {
+    version: 1,
     meter: { count: 4, unit: 4 },
     staves: [createEmptyStaff()]
   };
 }
-
 // 创建音符（单音）
 export function createNote(
   midiPitch: number,
@@ -171,12 +176,18 @@ export function createNote(
   alter: -1 | 0 | 1 = 0
 ): Note {
   return {
-    type: 'note',
+    type: "note",
     pitches: [{ midiPitch, alter }],
     duration,
     dots,
     tieStart: false,
-    tieEnd: false
+    tieEnd: false,
+    tuplet: undefined,
+    dynamics: undefined,
+    articulation: undefined,
+    ornament: undefined
+  };
+}
   };
 }
 
@@ -187,12 +198,18 @@ export function createChord(
   dots: number = 0
 ): Note {
   return {
-    type: 'note',
-    pitches: pitches.map(p => ({ midiPitch: p.midiPitch, alter: p.alter as -2 | -1 | 0 | 1 | 2 })),
+    type: "note",
+    pitches: [{ midiPitch, alter }],
     duration,
     dots,
     tieStart: false,
-    tieEnd: false
+    tieEnd: false,
+    tuplet: undefined,
+    dynamics: undefined,
+    articulation: undefined,
+    ornament: undefined
+  };
+}
   };
 }
 
@@ -412,9 +429,13 @@ export function generateLilyPond(score: Score): string {
 export function calculateMeasureDuration(measure: Measure): number {
   let total = 0;
   for (const el of measure.elements) {
-    total += durationValue(el.duration, el.dots);
+    // Only notes and rests contribute to duration
+    if (el.type === "note" || el.type === "rest") {
+      total += durationValue(el.duration, el.dots);
+    }
   }
   return total;
+}
 }
 
 /**

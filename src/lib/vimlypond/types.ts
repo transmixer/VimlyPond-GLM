@@ -41,6 +41,12 @@ export interface Note {
   dots: number;             // 附点数量
   tieStart?: boolean;       // 连音线开始
   tieEnd?: boolean;         // 连音线结束
+  tuplet?: {                // 连音 (三连音、五连音等)
+    ratio: [number, number]; // 比例: [3, 2] 表示 3连音代替2个
+  };
+  dynamics?: string;        // 力度标记 (p, mp, mf, f 等)
+  articulation?: string;     // 演奏法标记 (staccato, accent 等)
+  ornament?: string;        // 装饰音 (trill, grace 等)
 }
 
 // 休止符
@@ -50,13 +56,34 @@ export interface Rest {
   dots: number;
 }
 
-// 小节元素
-export type MeasureElement = Note | Rest;
+// 小节线类型
+export type BarLineType = 'single' | 'double' | 'final' | 'repeat-start' | 'repeat-end';
+
+// 反复记号
+export interface RepeatInfo {
+  start?: boolean;    // 反复开始
+  end?: boolean;      // 反复结束
+  count?: number;     // 反复次数，默认 2
+}
+
+// 小节线标记（作为独立元素存在于小节边界）
+export interface BarLine {
+  type: 'barline';
+  barType: BarLineType;
+  repeat?: RepeatInfo;
+}
+
+// 所有可能的小节元素类型
+// 使用标签联合(tagged union)方便扩展新类型
+export type MeasureElement = Note | Rest | BarLine;
 
 // 小节
 export interface Measure {
   elements: MeasureElement[];
   durationUsed: number;  // 已占用时值
+  barlineLeft?: BarLineType;   // 左侧小节线类型
+  barlineRight?: BarLineType;  // 右侧小节线类型
+  repeat?: RepeatInfo;          // 反复信息
 }
 
 // 谱号类型
@@ -71,8 +98,11 @@ export interface Staff {
 
 // 乐谱
 export interface Score {
+  version: number;       // 序列化版本号，用于数据迁移
   meter: Meter;
   staves: Staff[];
+  title?: string;        // 乐谱标题
+  composer?: string;     // 作曲者
 }
 
 // 光标位置
@@ -115,7 +145,21 @@ export interface Translations {
 // 语言类型
 export type Language = 'zh' | 'en';
 
+// ========== Command 模式 ==========
+
+// 命令接口 - 所有可执行操作都实现此接口
+export interface Command {
+  description: string;        // 命令描述（用于日志/调试）
+  execute: (state: { score: Score; cursorPos: CursorPosition }) => {
+    score: Score;
+    cursorPos: CursorPosition;
+  };
+  // 命令是否可合并到历史（比如连续输入同一个音符的每个音高应该合并为一步）
+  shouldMergeWith?: (prev: Command) => boolean;
+}
+
 // 可重复的操作类型（普通模式下可执行的修改操作）
+// 保留用于兼容，后续逐步迁移到 Command 模式
 export type RepeatableAction =
   | { type: 'deleteElement' }
   | { type: 'modifyDuration'; duration: number }
@@ -128,4 +172,3 @@ export type RepeatableAction =
   | { type: 'insertRest'; duration: number; dots: number }
   | { type: 'insertNote'; noteName: string; duration: number; dots: number }
   | { type: 'addToChord'; noteName: string };
-

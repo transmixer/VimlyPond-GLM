@@ -136,8 +136,12 @@ export function useVexFlowRenderer(
           const ties = createTiesFromMeasure(VF, measure, notes);
 
           // 收集音符引用（用于跨小节延音线）
-          measure.elements.forEach((el, elIdx) => {
-            if (el.type === 'note' && notes[elIdx]) {
+  measure.elements.forEach((el) => {
+    if (el.type === "barline") {
+      // Barline is rendered by VexFlow at the stave level, skip here
+      return;
+    }
+    if (el.type === "rest") {
               allNotes.push({
                 staffIndex: sIdx,
                 measureIndex: mIdx,
@@ -232,7 +236,11 @@ function createNotesFromMeasure(
   }
 
   measure.elements.forEach((el) => {
-    if (el.type === 'rest') {
+    if (el.type === "barline") {
+      // Barline is rendered by VexFlow at the stave level, skip here
+      return;
+    }
+    if (el.type === "rest") {
       const restNote = new VF.StaveNote({
         keys: [restKey],
         duration: getVexFlowDuration(el.duration, el.dots, 'rest'),
